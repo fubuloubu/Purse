@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wallet"
+dynamic = ["version"]
+description = "Purse: A Simple(r) Smart Wallet"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "eth-ape>=0.8.32",
+]
+
+[[project.authors]]
+name = "ApeWorX LTD"
+
+[tool.setuptools]
+packages = ["purse"]
+
+[tool.setuptools_scm]
+
+[[tool.ape.plugins]]
+name = "vyper"
+
+[[tool.ape.deployment.ethereum.sepolia]]
+name = "Purse"
+address = "0xf2ab6e1027d7f363ba3e726941195b0f51bc8732"
+[[tool.ape.deployment.ethereum.sepolia]]
+name = "Multicall"
+address = "0x3D3B0e66dCe9376c540840785A2a0d0D7aB44469"
+
+[tool.ape.foundry]
+evm_version = "prague"
