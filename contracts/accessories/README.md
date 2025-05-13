@@ -1,5 +1,16 @@
 # Purse 1st Party Accessories
 
+## Create
+
+_(see [`Create.vy`](./Create.vy))_
+
+This accessory that allows a Purse to create new contracts thru blueprints using 4 variations of `create(*args)`.
+Once deployed, this contract also emits an event to keep track of contracts you've deployed.
+
+```{notice}
+Right now, this module only supports blueprints, although `raw_create` is coming in Vyper 0.4.2.
+```
+
 ## Multicall
 
 _(see [`Multicall.vy`](./Multicall.vy))_
