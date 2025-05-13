@@ -35,7 +35,7 @@ def add_accessory(accessory: IAccessory):
     @param accessory The address of the new accessory that implements IAccessory
     """
     # NOTE: Can only work in a EIP-7702 context
-    assert msg.sender == self, "Purse:!authorized"
+    assert tx.origin == self, "Purse:!authorized"
 
     methods: DynArray[bytes4, 100] = staticcall accessory.getMethodIds()
     for method: bytes4 in methods:
@@ -56,7 +56,7 @@ def remove_accessory(accessory: IAccessory):
     @param accessory The address of the old accessory that implements IAccessory
     """
     # NOTE: Can only work in a EIP-7702 context
-    assert msg.sender == self, "Purse:!authorized"
+    assert tx.origin == self, "Purse:!authorized"
 
     methods: DynArray[bytes4, 100] = staticcall accessory.getMethodIds()
     for method: bytes4 in methods:
