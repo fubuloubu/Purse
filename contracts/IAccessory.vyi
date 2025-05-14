@@ -1,3 +1,0 @@
-@pure
-@external
-def getMethodIds() -> DynArray[bytes4, 100]: ...
