@@ -5,65 +5,46 @@
 @author ApeWorX LTD
 """
 
-from . import IAccessory
-
-
 # @notice Mapping of namespace hashes to module target
-accessoryByMethodId: public(HashMap[bytes4, IAccessory])
+accessoryByMethodId: public(HashMap[bytes4, address])
 
 
-event AccessoryAdded:
-    accessory: indexed(IAccessory)
-    methods: DynArray[bytes4, 100]
-
-
-event AccessoryRemoved:
-    accessory: indexed(IAccessory)
+event AccessoryUpdated:
+    method: indexed(bytes4)
+    old_accessory: indexed(address)
+    new_accessory: indexed(address)
 
 
 # NOTE: Cannot have constructor for EIP-7702 to work
 
 
+struct AccessoryUpdate:
+    method: bytes4
+    accessory: address
+
+
 @external
 # NOTE: Reentrancy guard ensures that `__default__` module calls can't call this
 @nonreentrant
 # TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
-def add_accessory(accessory: IAccessory):
+def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
     """
     @notice Add an accessory to this Purse
     @dev Method must be called by overriden delegate EOA
-    @param accessory The address of the new accessory that implements IAccessory
+    @param updates Array of address/method ID combos to update
     """
     # NOTE: Can only work in a EIP-7702 context
     assert tx.origin == self and tx.origin == msg.sender, "Purse:!authorized"
 
-    methods: DynArray[bytes4, 100] = staticcall accessory.getMethodIds()
-    for method: bytes4 in methods:
-        assert self.accessoryByMethodId[method].address == empty(address)
-        self.accessoryByMethodId[method] = accessory
+    for update: AccessoryUpdate in updates:
+        current_accessory: address = self.accessoryByMethodId[update.method]
+        self.accessoryByMethodId[update.method] = update.accessory
 
-    log AccessoryAdded(accessory=accessory, methods=methods)
-
-
-@external
-# NOTE: Reentrancy guard ensures that `__default__` module calls can't call this
-@nonreentrant
-# TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
-def remove_accessory(accessory: IAccessory):
-    """
-    @notice Remove an accessory from this Purse
-    @dev Method must be called by overriden delegate EOA
-    @param accessory The address of the old accessory that implements IAccessory
-    """
-    # NOTE: Can only work in a EIP-7702 context
-    assert tx.origin == self and tx.origin == msg.sender, "Purse:!authorized"
-
-    methods: DynArray[bytes4, 100] = staticcall accessory.getMethodIds()
-    for method: bytes4 in methods:
-        assert self.accessoryByMethodId[method] == accessory
-        self.accessoryByMethodId[method] = IAccessory(empty(address))
-
-    log AccessoryRemoved(accessory=accessory)
+        log AccessoryUpdated(
+            method=update.method,
+            old_accessory=current_accessory,
+            new_accessory=update.accessory,
+        )
 
 
 @payable
@@ -77,7 +58,7 @@ def __default__():
 
     # WARNING: Any call that matches the methodId check will be forwarded, handle down-stream auth
     #          logic accordingly (e.g. add `msg.sender == tx.origin` to restrict to this account)
-    accessory: IAccessory = self.accessoryByMethodId[convert(slice(msg.data, 0, 4), bytes4)]
-    assert accessory != IAccessory(empty(address)), "Purse:!no-accessory-found"
+    accessory: address = self.accessoryByMethodId[convert(slice(msg.data, 0, 4), bytes4)]
+    assert accessory != empty(address), "Purse:!no-accessory-found"
 
-    raw_call(accessory.address, msg.data, is_delegate_call=True)
+    raw_call(accessory, msg.data, is_delegate_call=True)

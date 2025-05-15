@@ -1,13 +1,3 @@
-from .. import IAccessory
-implements: IAccessory
-
-
-@pure
-@external
-def getMethodIds() -> DynArray[bytes4, 100]:
-    return [0x3f707e6b]
-
-
 struct Call:
     target: address
     value: uint256
