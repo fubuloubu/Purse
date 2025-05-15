@@ -9,57 +9,42 @@
 accessoryByMethodId: public(HashMap[bytes4, address])
 
 
-event AccessoryMethodAdded:
-    accessory: indexed(address)
+event AccessoryUpdated:
     method: indexed(bytes4)
-
-
-event AccessoryMethodRemoved:
-    accessory: indexed(address)
-    method: indexed(bytes4)
+    old_accessory: indexed(address)
+    new_accessory: indexed(address)
 
 
 # NOTE: Cannot have constructor for EIP-7702 to work
 
 
+struct AccessoryUpdate:
+    method: bytes4
+    accessory: address
+
+
 @external
 # NOTE: Reentrancy guard ensures that `__default__` module calls can't call this
 @nonreentrant
 # TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
-def add_accessory(accessory: address, methods: DynArray[bytes4, 100]):
+def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
     """
     @notice Add an accessory to this Purse
     @dev Method must be called by overriden delegate EOA
-    @param accessory The address of the new accessory to add
-    @param methods The list of method IDs to enable calling through `accessory`
+    @param updates Array of address/method ID combos to update
     """
     # NOTE: Can only work in a EIP-7702 context
     assert tx.origin == self and tx.origin == msg.sender, "Purse:!authorized"
 
-    for method: bytes4 in methods:
-        assert self.accessoryByMethodId[method] == empty(address), "Purse:!accessory-in-use"
-        self.accessoryByMethodId[method] = accessory
-        log AccessoryMethodAdded(accessory=accessory, method=method)
+    for update: AccessoryUpdate in updates:
+        current_accessory: address = self.accessoryByMethodId[update.method]
+        self.accessoryByMethodId[update.method] = update.accessory
 
-
-@external
-# NOTE: Reentrancy guard ensures that `__default__` module calls can't call this
-@nonreentrant
-# TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
-def remove_accessory(methods: DynArray[bytes4, 100]):
-    """
-    @notice Remove methods to call Accessories from this Purse
-    @dev Method must be called by overriden delegate EOA
-    @param methods The list of method IDs to disable calling for
-    """
-    # NOTE: Can only work in a EIP-7702 context
-    assert tx.origin == self and tx.origin == msg.sender, "Purse:!authorized"
-
-    for method: bytes4 in methods:
-        accessory: address = self.accessoryByMethodId[method]
-        assert accessory != empty(address), "Purse:!no-accessory-found"
-        self.accessoryByMethodId[method] = empty(address)
-        log AccessoryMethodRemoved(accessory=accessory, method=method)
+        log AccessoryUpdated(
+            method=update.method,
+            old_accessory=current_accessory,
+            new_accessory=update.accessory,
+        )
 
 
 @payable
