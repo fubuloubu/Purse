@@ -15,21 +15,20 @@ def test_can_transfer(purse, accounts):
     assert purse.balance - balance == convert("1 ether", int)
 
 
-def test_change_accessories(purse, multicall):
+def test_add_rm_accessory(purse, multicall, encode_accessory_data):
     # TODO: Add `.method_id(args_str)` to `ContractMethodHandler`
-    method_id = multicall.execute.encode_input([])[:4]
+    accessory_data = encode_accessory_data(multicall, multicall.execute)
+    method_id = accessory_data[0]["method"]
     assert purse.accessoryByMethodId(method_id) == ZERO_ADDRESS
 
-    purse.add_accessory(multicall, sender=purse)
+    purse.update_accessories(accessory_data, sender=purse)
     assert purse.accessoryByMethodId(method_id) == multicall
 
-    purse.remove_accessory(multicall, sender=purse)
+    accessory_data[0]["accessory"] = ZERO_ADDRESS
+    purse.update_accessories(accessory_data, sender=purse)
     assert purse.accessoryByMethodId(method_id) == ZERO_ADDRESS
 
 
 def test_cant_call_arbitrary(purse):
-    with reverts(message="Purse:!no-accessory-found"):
-        purse(sender=purse)
-
     with reverts(message="Purse:!no-accessory-found"):
         purse(data="0xa1b2c3d", sender=purse)

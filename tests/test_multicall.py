@@ -7,7 +7,9 @@ def purse(singleton, owner, multicall):
     with owner.delegate_to(
         singleton,
         # NOTE: Add multicall as an accessory at the same time
-        data=singleton.add_accessory.encode_input(multicall),
+        data=singleton.update_accessories.encode_input(
+            dict(accessory=multicall, method=multicall.execute.method_id),
+        ),
     ) as purse:
         return purse
 
