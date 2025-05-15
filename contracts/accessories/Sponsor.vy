@@ -3,7 +3,7 @@ from snekmate.utils import eip712_domain_separator
 
 initializes: eip712_domain_separator
 
-SPONSOR_TYPEHASH: constant(bytes32) = keccak256("Sponsor(address target,bytes data,uint256 amount,uint256 deadline,uint8 v,bytes32 v,bytes32 s)")
+SPONSOR_TYPEHASH: constant(bytes32) = keccak256("Sponsor(address target,bytes data,uint256 amount,uint256 deadline,uint256 nonce,uint8 v,bytes32 r,bytes32 s)")
 
 # @custom:storage-location erc7201:purse.accessories.sponsor.sponsor_nonce
 # keccak256(abi.encode(uint256(keccak256("purse.accessories.sponsor.sponsor_nonce")) - 1)) & ~bytes32(uint256(0xff))
