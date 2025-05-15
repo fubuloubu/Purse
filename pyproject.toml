@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wallet"
+name = "purse"
 dynamic = ["version"]
 description = "Purse: A Simple(r) Smart Wallet"
 readme = "README.md"
@@ -20,7 +20,10 @@ name = "ApeWorX LTD"
 packages = ["purse"]
 
 [tool.setuptools_scm]
+# NOTE: Required for `setuptools-scm` to function
 
+[[tool.ape.plugins]]
+name = "foundry"
 [[tool.ape.plugins]]
 name = "vyper"
 
@@ -31,5 +34,10 @@ address = "0xf2ab6e1027d7f363ba3e726941195b0f51bc8732"
 name = "Multicall"
 address = "0x3D3B0e66dCe9376c540840785A2a0d0D7aB44469"
 
+[tool.ape.ethereum.local]
+default_provider = "foundry"
+
 [tool.ape.foundry]
+evm_version = "prague"
+[tool.ape.foundry.ethereum.mainnet]
 evm_version = "prague"
