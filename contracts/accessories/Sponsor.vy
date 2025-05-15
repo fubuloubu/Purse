@@ -24,6 +24,19 @@ def sponsor(
     r: bytes32,
     s: bytes32
 ):  # 0x92e45696
+    """
+    @notice Executes a pre-signed call on behalf of the Purse, optionally transferring ETH.
+    @dev This function uses EIP-712 to verify a signature over the call parameters.
+        If valid, it sends `amount` ETH and executes `data` on the `target` address.
+        Reverts if the signature is invalid or expired.
+    @param target The address to call.
+    @param data ABI-encoded calldata to send to the target.
+    @param amount The amount of ETH (in wei) to send along with the call.
+    @param deadline A timestamp after which the signature is no longer valid.
+    @param v Recovery byte of the signature.
+    @param r Half of the ECDSA signature pair.
+    @param s Half of the ECDSA signature pair.
+    """
     assert block.timestamp <= deadline, "Sponsor:!expired-signature"
 
     nonce: uint256 = self.sponsor_nonce
