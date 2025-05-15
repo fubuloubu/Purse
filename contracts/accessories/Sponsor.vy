@@ -3,8 +3,8 @@ from snekmate.utils import eip712_domain_separator
 
 initializes: eip712_domain_separator
 
-# @custom:storage-location erc7201:purse.accessories.sponsor.nonce
-# keccak256(abi.encode(uint256(keccak256("purse.accessories.sponsor.nonce")) - 1)) & ~bytes32(uint256(0xff))
+# @custom:storage-location erc7201:purse.accessories.sponsor.sponsor_nonce
+# keccak256(abi.encode(uint256(keccak256("purse.accessories.sponsor.sponsor_nonce")) - 1)) & ~bytes32(uint256(0xff))
 sponsor_nonce: public(uint256)
 
 @deploy
