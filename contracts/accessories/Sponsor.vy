@@ -9,8 +9,6 @@ sponsor_nonce: public(uint256)
 
 @deploy
 def __init__():
-    # TODO: think about how to integrate correctly in Purse.vy
-    # so additional accessories may use EIP712 functionality
     eip712_domain_separator.__init__("AccessorySponsor", "1")
 
 
