@@ -1,8 +1,5 @@
 # pragma version 0.4.1
-from .. import IAccessory
 from snekmate.utils import eip712_domain_separator
-
-implements: IAccessory
 
 initializes: eip712_domain_separator
 
@@ -15,15 +12,6 @@ def __init__():
     # TODO: think about how to integrate correctly in Purse.vy
     # so additional accessories may use EIP712 functionality
     eip712_domain_separator.__init__("AccessorySponsor", "1")
-
-
-@pure
-@external
-def getMethodIds() -> DynArray[bytes4, 100]:
-    return [
-        0x44210e0d, # sponsor(bytes,uint256,uint256,uint8,bytes32,bytes32)
-        0x84b0196e, # eip712Domain()
-    ]
 
 
 @external
