@@ -11,7 +11,7 @@ sponsor_nonce: public(uint256)  # 0x53160a60
 
 @deploy
 def __init__():
-    eip712_domain_separator.__init__("AccessorySponsor", "1")
+    eip712_domain_separator.__init__("Sponsor", "1")
 
 
 @external
