@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "eth-ape>=0.8.32",
+    "snekmate>=0.0.1",
 ]
 
 [[project.authors]]
