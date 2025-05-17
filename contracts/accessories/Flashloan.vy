@@ -21,7 +21,10 @@ def onFlashLoan(
     fee: uint256,
     data: Bytes[65535],
 ) -> bytes32:
-    # NOTE: Ensure that appropiate amount of allowance is given to caller
+    # NOTE: Only trusted context allowed
+    assert initiator == self, "Flashloan:!authorized"
+
+    # NOTE: Ensure that appropriate amount of allowance is given to caller
     if staticcall token.allowance(tx.origin, msg.sender) < amount + fee:
         extcall token.approve(msg.sender, amount + fee)
 
