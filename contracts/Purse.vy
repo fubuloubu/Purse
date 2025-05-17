@@ -51,14 +51,14 @@ def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
 @external
 # TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
 @nonreentrant
-def __default__():
+def __default__() -> Bytes[65535]:
     # NOTE: Don't bork value transfers in
     if msg.value > 0 or len(msg.data) < 4:
-        return
+        return b""
 
     # WARNING: Any call that matches the methodId check will be forwarded, handle down-stream auth
     #          logic accordingly (e.g. add `msg.sender == tx.origin` to restrict to this account)
     accessory: address = self.accessoryByMethodId[convert(slice(msg.data, 0, 4), bytes4)]
     assert accessory != empty(address), "Purse:!no-accessory-found"
 
-    raw_call(accessory, msg.data, is_delegate_call=True)
+    return raw_call(accessory, msg.data, is_delegate_call=True, max_outsize=65535)

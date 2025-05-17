@@ -11,3 +11,14 @@ No delegatecalls are possible from this module, but is is executed through the n
 ```{notice}
 To make a single call via your Purse, simply use your key normally and you can make any transaction you want.
 ```
+
+## Flashloan
+
+_(see [`Flashloan.vy`](./Flashloan.vy))_
+
+This accessory implements ERC3156's "Flash Borrower" callback interface, which responds by approving the flash loan target for the amount it needs (if not already approved), and then calls back to the Purse via a normal call using the callback's `data` parameter.
+It finishes off by returning the appropiate `bytes32` return value per the spec.
+
+```{notice}
+For most flashloans to work, typically the call forwarded to the Purse via `data` must do *something* with the tokens in order to repay them, or else the flashloan will fail.
+```
