@@ -52,7 +52,7 @@ def sponsor(
             )
         )
     )
-    assert ecrecover(digest, v, r, s) == self
+    assert ecrecover(digest, v, r, s) == self, "Sponsor:!unauthorized-signer"
 
     self.sponsor_nonce = nonce + 1
     raw_call(target, data, value=amount)
