@@ -37,14 +37,16 @@ Unlike `Multicall`, which facilitates batch execution, the `Sponsor` accessory f
 This accessory uses `raw_call` to invoke calls. Make sure that the `target` and encoded `data` are safe and perform as intended, since there is no internal validation of the payload.
 ```
 
-```{tip}
 To construct a valid sponsor call:
+
 1. Sign the EIP-712-encoded struct off-chain:
+
 ```
 Sponsor(address target,bytes data,uint256 amount,uint256 deadline,uint256 nonce,uint8 v,bytes32 r,bytes32 s)
 ```
+
 2. Pass the signed `v, r, s` components along with the original `target`, `data`, `amount`, and `deadline` to `sponsor()`.
-```
 
 ```{note}
-The `nonce` can be fetched must match the current `sponsor_nonce()` value or the transaction will revert. This prevents replay attacks.
+The `nonce` can be fetched and MUST match the current `sponsor_nonce()` value or the transaction will revert. This prevents replay attacks.
+```
