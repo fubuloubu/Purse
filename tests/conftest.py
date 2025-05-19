@@ -20,3 +20,8 @@ def purse(singleton, owner):
 @pytest.fixture(scope="session")
 def multicall(project, owner):
     return owner.deploy(project.Multicall)
+
+
+@pytest.fixture(scope="session")
+def sponsor(project, owner):
+    return owner.deploy(project.Sponsor)
