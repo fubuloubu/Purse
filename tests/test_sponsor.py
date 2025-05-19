@@ -1,5 +1,11 @@
 import ape
 import pytest
+from ape import compilers
+
+
+@pytest.fixture(scope="module")
+def mallory(accounts):
+    yield accounts[-1]
 
 
 @pytest.fixture(scope="module")
@@ -7,14 +13,16 @@ def purse(singleton, owner, multicall):
     with owner.delegate_to(
         singleton,
         # NOTE: Add multicall as an accessory at the same time
-        data=singleton.update_accessories.encode_input([("0x92e45696", sponsor), ("0x53160a60", sponsor)]),
+        data=singleton.update_accessories.encode_input(
+            [("0x92e45696", sponsor), ("0x53160a60", sponsor)]
+        ),
     ) as purse:
         return purse
 
 
 @pytest.fixture(scope="module")
 def dummy(owner):
-    code = """# pragma version 0.4.1
+    SRC = """# pragma version 0.4.1
 digest: public(bytes32)
 
 @external
@@ -22,8 +30,8 @@ digest: public(bytes32)
 def __default__():
     self.digest = keccak256(msg.data)
     """
-    # deploy tester contract
-    return
+    container = compilers.compile_source("vyper", SRC, contractName="Dummy")
+    return container.deploy(sender=owner)
 
 
 def test_sponsor_plain_eth_transfer():
