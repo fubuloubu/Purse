@@ -1,23 +1,23 @@
-import ape
 import pytest
 from ape import compilers
 
 
-@pytest.fixture(scope="module")
-def mallory(accounts):
-    yield accounts[-1]
-
-
-@pytest.fixture(scope="module")
-def purse(singleton, owner, multicall):
+@pytest.fixture()
+def purse(singleton, owner, sponsor, encode_accessory_data):
     with owner.delegate_to(
         singleton,
         # NOTE: Add multicall as an accessory at the same time
         data=singleton.update_accessories.encode_input(
-            [("0x92e45696", sponsor), ("0x53160a60", sponsor)]
+            encode_accessory_data(
+                # Accessory
+                sponsor,
+                # Methods
+                sponsor.sponsor_nonce,
+                sponsor.sponsor,
+            )
         ),
     ) as purse:
-        return purse
+        yield purse
 
 
 @pytest.fixture(scope="module")
@@ -67,7 +67,7 @@ def test_sponsor_reverts_if_nonce_used_is_incorrect(purse, owner):
     pass
 
 
-def test_sponsor_reverts_signer_is_unauthorized(purse, mallory):
+def test_sponsor_reverts_signer_is_unauthorized(purse, other):
     # Mallory signs instead of the owner
     # Use ape reverts, check Sponsor:!unauthorized-signer erro
     pass
