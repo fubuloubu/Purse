@@ -1,3 +1,5 @@
+# pragma version 0.4.2
+# pragma nonreentrancy on
 struct Call:
     target: address
     value: uint256

@@ -1,3 +1,5 @@
+# pragma version 0.4.2
+# pragma nonreentrancy on
 from ethereum.ercs import IERC20
 
 interface IERC3156FlashBorrower:

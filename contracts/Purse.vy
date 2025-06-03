@@ -1,4 +1,5 @@
-# pragma version 0.4.1
+# pragma version 0.4.2
+# pragma nonreentrancy on
 """
 @title Purse Smart Wallet
 @license Apache 2.0
@@ -25,8 +26,6 @@ struct AccessoryUpdate:
 
 @external
 # NOTE: Reentrancy guard ensures that `__default__` module calls can't call this
-@nonreentrant
-# TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
 def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
     """
     @notice Add an accessory to this Purse
@@ -49,7 +48,7 @@ def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
 
 @payable
 @external
-# TODO: In Vyper 0.4.2, all contract calls are non-reentrant by default
+@reentrant
 def __default__() -> Bytes[65535]:
     # NOTE: Don't bork value transfers in
     if msg.value > 0 or len(msg.data) < 4:
