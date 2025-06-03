@@ -29,6 +29,11 @@ def multicall(project, owner):
 
 
 @pytest.fixture(scope="session")
+def create2_deployer(project, owner):
+    return owner.deploy(project.Create)
+
+
+@pytest.fixture(scope="session")
 def sponsor(project, owner):
     return owner.deploy(project.Sponsor)
 
