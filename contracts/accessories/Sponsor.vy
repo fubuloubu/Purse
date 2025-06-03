@@ -1,4 +1,4 @@
-# pragma version 0.4.1
+# pragma version 0.4.2
 from snekmate.utils import eip712_domain_separator
 
 initializes: eip712_domain_separator

@@ -1,4 +1,4 @@
-# pragma version 0.4.1
+# pragma version 0.4.2
 """
 @title Purse Smart Wallet
 @license Apache 2.0
