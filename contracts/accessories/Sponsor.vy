@@ -1,4 +1,5 @@
 # pragma version 0.4.2
+# pragma nonreentrancy on
 from snekmate.utils import eip712_domain_separator
 
 initializes: eip712_domain_separator
