@@ -23,8 +23,6 @@ packages = ["purse"]
 # NOTE: Required for `setuptools-scm` to function
 
 [[tool.ape.plugins]]
-name = "foundry"
-[[tool.ape.plugins]]
 name = "vyper"
 
 [[tool.ape.deployment.ethereum.sepolia]]
@@ -33,11 +31,3 @@ address = "0xf2ab6e1027d7f363ba3e726941195b0f51bc8732"
 [[tool.ape.deployment.ethereum.sepolia]]
 name = "Multicall"
 address = "0x3D3B0e66dCe9376c540840785A2a0d0D7aB44469"
-
-[tool.ape.ethereum.local]
-default_provider = "foundry"
-
-[tool.ape.foundry]
-evm_version = "prague"
-[tool.ape.foundry.ethereum.mainnet]
-evm_version = "prague"
