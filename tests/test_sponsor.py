@@ -28,7 +28,7 @@ digest: public(bytes32)
 @external
 @payable
 def __default__():
-    self.digest = keccak256(msg.data)
+    self.digest = keccak256(slice(msg.data, 0, 2048))
     """
     container = compilers.compile_source("vyper", SRC, contractName="Dummy")
     return container.deploy(sender=owner)
