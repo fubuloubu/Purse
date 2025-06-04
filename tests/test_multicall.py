@@ -19,11 +19,11 @@ def purse(singleton, owner, multicall, encode_accessory_data):
         yield purse
 
 
-def test_empty_multicall(purse, multicall):
-    purse(data=multicall.execute.encode_input([]), sender=purse)
+def test_empty_multicall(owner, purse, multicall):
+    purse(data=multicall.execute.encode_input([]), sender=owner)
 
 
-def test_single_multicall(purse, multicall, accounts):
+def test_single_multicall(owner, purse, multicall, accounts):
     a = accounts[1]
     bal_a = a.balance
     purse(
@@ -32,12 +32,12 @@ def test_single_multicall(purse, multicall, accounts):
                 dict(target=a, value="1 ether", data=b""),
             ]
         ),
-        sender=purse,
+        sender=owner,
     )
     assert a.balance - bal_a == ape.convert("1 ether", int)
 
 
-def test_many_multicall(purse, multicall, accounts):
+def test_many_multicall(owner, purse, multicall, accounts):
     a, b, c = accounts[1:4]
     bal_a = a.balance
     bal_b = b.balance
@@ -51,7 +51,7 @@ def test_many_multicall(purse, multicall, accounts):
                 dict(target=c, value="3 ether", data=b""),
             ]
         ),
-        sender=purse,
+        sender=owner,
     )
 
     assert a.balance - bal_a == ape.convert("1 ether", int)
