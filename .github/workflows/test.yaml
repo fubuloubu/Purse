@@ -8,7 +8,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ApeWorX/github-action@v3
-    # NOTE: Until merged and released
-    - run: pip install "git+https://github.com/fubuloubu/ape.git@feat/api/support-authorizations"
     - run: ape compile --size
     - run: ape test -s --gas
