@@ -1,4 +1,11 @@
-on: ["push", "pull_request"]
+on:
+  push:  # NOTE: All branches (but checks concurrency)
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 name: Test
 
