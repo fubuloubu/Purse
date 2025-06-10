@@ -49,6 +49,7 @@ def update_accessories(updates: DynArray[AccessoryUpdate, 100]):
 @payable
 @external
 @reentrant
+@raw_return
 def __default__() -> Bytes[65535]:
     # NOTE: Don't bork value transfers in
     if msg.value > 0 or len(msg.data) < 4:
