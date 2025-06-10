@@ -1,0 +1,20 @@
+on:
+  push:  # NOTE: All branches (but checks concurrency)
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+name: Test
+
+jobs:
+  functional:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ApeWorX/github-action@v3
+    - run: ape compile --size
+    - uses: foundry-rs/foundry-toolchain@v1
+    - run: ape test -s --gas --coverage
