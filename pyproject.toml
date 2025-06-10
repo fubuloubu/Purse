@@ -25,6 +25,13 @@ packages = ["purse"]
 [[tool.ape.plugins]]
 name = "vyper"
 
+[[tool.ape.plugins]]
+name = "foundry"
+[tool.ape.foundry]
+evm_version = "prague"
+[tool.ape.ethereum.local]
+default_provider = "foundry"
+
 [[tool.ape.deployment.ethereum.sepolia]]
 name = "Purse"
 address = "0xf2ab6e1027d7f363ba3e726941195b0f51bc8732"
